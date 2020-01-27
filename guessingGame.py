@@ -4,7 +4,7 @@
 #This program is a guessing game that prompts the user to guess a number in a range with increasing levels of difficulty
 
 import random
-from colorama import Fore
+from colorama import Fore, init
 
 #Global variable to save the players highest level in a session
 highestLevel = 1
@@ -55,7 +55,8 @@ def gameLoop(winningNum, maxGuesses, upperRange):
         #Input validation
         while True:            
             
-            playerGuess = input(Fore.WHITE + "Enter your guess: ")
+            print(Fore.WHITE + "Enter your guess: " , end = "")
+            playerGuess = input()
             
             try:
                 playerGuess = int(playerGuess)
@@ -86,4 +87,5 @@ def main():
     playGame(1)
 
 if __name__ == "__main__":
+    init()
     main()
