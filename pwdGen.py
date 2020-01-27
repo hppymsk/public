@@ -6,7 +6,6 @@
 
 import random
 from colorama import Fore, Style, init
-random.seed()
 init()
 
 #Validates input based on type and range
@@ -51,29 +50,30 @@ def userOptions():
 
     #Include letters (Y/N)
     print(Fore.WHITE + "Include " + Fore.BLUE + "letters" + Fore.WHITE + " in the password? (Y/N): " , sep = "", end = "")
-    userInput = input()
-    if validateInput(userInput, "", ["y", "Y", "yes", "YES"]):
+    if validateInput(input(), "", ["y", "Y", "yes", "YES"]):
         lettersBool = True
     else:
         lettersBool = False
     
     #Include numbers (Y/N)
     print(Fore.WHITE + "Include " + Fore.GREEN + "numbers" + Fore.WHITE + " in the password? (Y/N): " , sep = "", end = "")
-    userInput = input()
-    if validateInput(userInput, "", ["y", "Y", "yes", "YES"]):
+    if validateInput(input(), "", ["y", "Y", "yes", "YES"]):
         numbersBool = True
     else:
         numbersBool = False
     
     #Include symbols (Y/N)
     print(Fore.WHITE + "Include " + Fore.RED + "symbols" + Fore.WHITE + " in the password? (Y/N): " , sep = "", end = "")
-    userInput = input()
-    if validateInput(userInput, "", ["y", "Y", "yes", "YES"]):
+    if validateInput(input(), "", ["y", "Y", "yes", "YES"]):
         symbolsBool = True
     else:
         symbolsBool = False
 
-    generatePassword(int(pwdLength), lettersBool, numbersBool, symbolsBool)
+    if not any([lettersBool, numbersBool, symbolsBool]):
+        print(Fore.RED + "You need to select at least one option.")
+        userOptions()
+    else:
+        generatePassword(int(pwdLength), lettersBool, numbersBool, symbolsBool)
 
 #Generates a list of characters to be used in password generation based on options selected
 def generatePassword(pwdLength, lettersBool, numbersBool, symbolsBool):
@@ -98,7 +98,14 @@ def generatePassword(pwdLength, lettersBool, numbersBool, symbolsBool):
     #Generates and prints 5 passwords
     for i in range(5):
         password = random.choices(passwordList, k = int(pwdLength))
+        print(Fore.WHITE + "" , (i + 1), ": ", sep = "", end = "")
         printPassword(password, letterList)
+    
+    print(Fore.WHITE + "Go again? (Y/N): ", end = "")
+    if validateInput(input(), "", ["y", "Y", "yes", "YES"]):
+        userOptions()
+    else:
+        quit
 
 #Prints passwords with color coding based on character type
 def printPassword(password, letterList):
@@ -109,7 +116,7 @@ def printPassword(password, letterList):
             print(Fore.GREEN + "" , password[i], sep = "", end = "")
         elif password[i] in ["~", "!", "@", "#", "$", "%", "^", "&", "*", "-", "+"]:
             print(Fore.RED + "" , password[i], sep = "", end = "")
-    print()
+    print('\n')
 
 def main():
     userOptions()
