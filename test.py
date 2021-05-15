@@ -1,25 +1,24 @@
-from colorama import Fore, Style, init
-import random
-init()
-passwordList = []
+import os, sys, time
+hostname = "8.8.8.8"
+response = os.system("ping -c 1 " + hostname + " >/dev/null 2>&1")
 
-letterList = []
+if response == 0:
+      print (hostname, 'Reboot successful!')
+      sys.exit(0)
+else:
+      sys.stderr.write(hostname + ' Rebooting..')
 
-for i in range(65, 91):
-    letterList.append(chr(i))
-    passwordList.append(chr(i))
-for i in range (97, 123):
-    letterList.append(chr(i))
-    passwordList.append(chr(i))
-for i in range(10):
-    passwordList.append(i)
-passwordList.extend(["~", "!", "@", "#", "$", "%", "^", "&", "*", "-", "+"])
-password = random.choices(passwordList, k = int(10))
+sleep_wait=1
+max_ping_wait=10
+count=0
+while (count < max_ping_wait and os.system("ping -c 1 " + hostname + " >/dev/null 2>&1")):
+      sys.stderr.write('.')
+      time.sleep(sleep_wait)
+      count+=1
 
-for i in range(len(password)):
-    if password[i] in letterList:
-        print(Fore.BLUE + "", password[i], sep = "", end = "")
-    elif password[i] in range(10):
-        print(Fore.GREEN + "", password[i], sep = "", end = "")
-    elif password[i] in ["~", "!", "@", "#", "$", "%", "^", "&", "*", "-", "+"]:
-        print(Fore.RED + "", password[i], sep = "", end = "")
+if (count < max_ping_wait):
+    print (hostname, 'Reboot successful!')
+    sys.exit(0)
+else:
+    print (hostname, 'Reboot unsuccessful.')
+    sys.exit(1)

@@ -1,0 +1,22 @@
+{
+    "1": {
+        "name": "Scott",
+        "wins": "1"
+    },
+    "2": {
+        "name": "Larry",
+        "wins": "2"
+    },
+    "3": {
+        "name": "Tim",
+        "wins": "6"
+    },
+    "4": {
+        "name": "Timf",
+        "wins": "1"
+    },
+    "5": {
+        "name": "slomch",
+        "wins": "1"
+    }
+}
