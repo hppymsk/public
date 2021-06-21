@@ -2,9 +2,10 @@
 
 import discord
 import os
-import requests
 import json
+import random
 
+token = os.environ['DISCORD-API-TOKEN']
 client = discord.Client()
 
 with open('rewards.json', 'r') as read_file:
@@ -92,6 +93,17 @@ def teams(player):
 
   return player + '\'s teams:' + '\n' + twosteam + '\n' + threesteam + '\n' + fivesteam
 
+def title(player):
+  #find ratings
+  return 'NYI'
+
+def roll(rollrange):
+  rollrange = int(rollrange)
+  if rollrange is not None:
+    return random.randint(1, rollrange)
+  else:
+    return random.randint(1, 100)
+
 @client.event
 async def on_ready():
     print('Logged in as {0.user}'.format(client))
@@ -115,4 +127,20 @@ async def on_message(message):
       player = msg.split('!teams ',1)[1]
       await message.channel.send(teams(player))
 
-client.run(os.environ['TOKEN'])
+    if msg.startswith('!title'):
+      player = msg.split('!title ',1)[1]
+      await message.channel.send(title(player))
+
+    if msg.startswith('!vices'):
+      await message.channel.send('Fuck Vices.')
+
+    if msg.startswith('!roll'):
+      try:
+        rollrange = msg.split('!roll ',1)[1]
+      except:
+        rollrange = 100
+      finally:
+        await message.channel.send(roll(rollrange))
+      
+
+client.run(os.environ['DISCORD-API-TOKEN'])
