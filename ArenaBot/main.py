@@ -106,47 +106,11 @@ def roll(rollrange):
     return random.randint(1, 100)
 
 def eightball():
-  number = random.randint(1, 20)
-  if number == 1:
-    return 'It is certain.'
-  if number == 2:
-    return 'It is decidedly so.'
-  if number == 3:
-    return 'Without a doubt.'
-  if number == 4:
-    return 'Yes definitely.'
-  if number == 5:
-    return 'You may rely on it.'
-  if number == 6:
-    return 'As I see it, yes.'
-  if number == 7:
-    return 'Most likely.'
-  if number == 8:
-    return 'Outlook good.'
-  if number == 9:
-    return 'Yes.'
-  if number == 10:
-    return 'Signs point to yes.'
-  if number == 11:
-    return 'Reply hazy, try again.'
-  if number == 12:
-    return 'Ask again later.'
-  if number == 13:
-    return 'Better not tell you now.'
-  if number == 14:
-    return 'Cannot predict now.'
-  if number == 15:
-    return 'Concentrate and ask again.'
-  if number == 16:
-    return 'Don\'t count on it.'
-  if number == 17:
-    return 'My reply is no.'
-  if number == 18:
-    return 'My sources say no.'
-  if number == 19:
-    return 'Outlook not so good.'
-  if number == 20:
-    return 'Very doubtful.'
+  number = random.randint(0, 19)
+  outcome = ['It is certain.', 'It is decidedly so.', 'Without a doubt.', 'Yes definitely.', 'You may rely on it.', 'As I see it, yes.', 'Most likely.', 'Outlook good.', 'Yes.',
+  'Signs point to yes.', 'Reply hazy, try again.', 'Ask again later.', 'Better not tell you now.', 'Cannot predict now.', 'Concentrate and ask again.', 'Don\'t count on it.',
+  'My reply is no.', 'My sources say no.', 'Outlook not so good.', 'Very doubtful.']
+  return outcome[number]
 
 def points(rating):
   if rating is not type(int):
