@@ -104,6 +104,49 @@ def roll(rollrange):
   else:
     return random.randint(1, 100)
 
+def eightball():
+  number = random.randint(1, 20)
+  if number == 1:
+    return 'It is certain.'
+  if number == 2:
+    return 'It is decidedly so.'
+  if number == 3:
+    return 'Without a doubt.'
+  if number == 4:
+    return 'Yes definitely.'
+  if number == 5:
+    return 'You may rely on it.'
+  if number == 6:
+    return 'As I see it, yes.'
+  if number == 7:
+    return 'Most likely.'
+  if number == 8:
+    return 'Outlook good.'
+  if number == 9:
+    return 'Yes.'
+  if number == 10:
+    return 'Signs point to yes.'
+  if number == 11:
+    return 'Reply hazy, try again.'
+  if number == 12:
+    return 'Ask again later.'
+  if number == 13:
+    return 'Better not tell you now.'
+  if number == 14:
+    return 'Cannot predict now.'
+  if number == 15:
+    return 'Concentrate and ask again.'
+  if number == 16:
+    return 'Don\'t count on it.'
+  if number == 17:
+    return 'My reply is no.'
+  if number == 18:
+    return 'My sources say no.'
+  if number == 19:
+    return 'Outlook not so good.'
+  if number == 20:
+    return 'Very doubtful.'
+
 @client.event
 async def on_ready():
     print('Logged in as {0.user}'.format(client))
@@ -141,6 +184,14 @@ async def on_message(message):
         rollrange = 100
       finally:
         await message.channel.send(roll(rollrange))
-      
+    
+    if msg.startswith('!hasquinnkilledsireyet'):
+      await message.channel.send('No.')
+    
+    if msg.startswith('!mcdonalds'):
+      await message.channel.send('Just the best, honestly.')
+
+    if msg.startswith('!8ball'):
+      await message.channel.send(eightball())
 
 client.run(os.environ['DISCORD-API-TOKEN'])
