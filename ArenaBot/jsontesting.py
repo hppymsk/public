@@ -65,7 +65,24 @@ for x in range(len(twos['entries'])):
            twosteam = 'Personal: ' + str(twos['entries'][x]['team']['members'][y]['rating']) + ' | ' + 'Team: ' + str(twos['entries'][x]['rating'])
 
 print(twosteam)
-'''
+
 msg = '!roll 1 100'
 roll = msg.split('!roll ',1)[1]
 print(roll[0])
+'''
+
+rating = 1500
+
+if rating > 1500:
+    points = (1511.26/(1+1639.28*2.71828**(-0.00412*rating)))
+if rating <= 1500:
+    points = 0.22*rating+14
+twospoints = points*0.76
+threespoints = points*0.88
+
+print('2v2: ' + str(round(twospoints)) + '\n' + '3v3: ' + str(round(threespoints)) + '\n' + '5v5: ' + str(round(points)))
+'''
+If [Rating]>1500: [Points] = 1511.26/(1+1639.28*Power(2.71828, -0.00412*[Rating]))
+if <1500 Points = 0.22*[Rating]+14
+2v2 earns 76% and 3v3 earns 88% of a fives team
+'''
