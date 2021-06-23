@@ -73,9 +73,9 @@ def teams(player):
     return None
   
   player = player.capitalize()
-  twosteam = 'No 2v2 Team Found for ' + player
-  threesteam = 'No 3v3 Team Found for ' + player
-  fivesteam = 'No 5v5 Team Found for ' + player
+  twosteam = 'No 2v2 Team'
+  threesteam = 'No 3v3 Team'
+  fivesteam = 'No 5v5 Team'
 
   for x in range(len(twos['entries'])):
       if 'members' not in twos['entries'][x]['team']:
