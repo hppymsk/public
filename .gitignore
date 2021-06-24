@@ -2,3 +2,8 @@
 .vscode
 __pycache__
 ignore
+/ArenaBot/2v2.json
+/ArenaBot/3v3.json
+/ArenaBot/5v5.json
+/ArenaBot/rewards.json
+/ArenaBot/jsontesting.py

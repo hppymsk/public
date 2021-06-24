@@ -7,8 +7,8 @@ import copy
 class GameOfLife:
     def __init__(self):
         #Options
-        self.sleepTime = 50
-        self.gridsize = 30
+        self.sleepTime = 10
+        self.gridsize = 10
 
         #Create & Configure root 
         root = Tk()
@@ -134,15 +134,17 @@ class GameOfLife:
                     self.buttons[x][y].configure(bg = 'white')
         def increaseBoardSize():
             stop()
-            self.frame.destroy()
-            self.gridsize += 10
-            generateBoard()
+            if self.gridsize < 90:
+                self.gridsize += 10
+                self.frame.destroy()
+                generateBoard()
 
         def decreaseBoardSize():
             stop()
-            self.frame.destroy()
-            self.gridsize -= 10
-            generateBoard()
+            if self.gridsize > 10:
+                self.gridsize -= 10
+                self.frame.destroy()
+                generateBoard()
 
         def generateBoard():
             self.buttons = {}
