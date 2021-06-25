@@ -12,8 +12,8 @@ class GameOfLife:
     def __init__(self):
         #Options
         self.isRunning = False
-        self.sleepTime = 10
-        self.gridsize = 10
+        self.sleepTime = 100
+        self.gridsize = 100
         self.canvassize = 800
         self.matrixsize = int(self.canvassize / self.gridsize)
         self.isGridActive = True
@@ -30,6 +30,8 @@ class GameOfLife:
             self.matrixsize = int(self.canvassize / self.gridsize)
             self.nmatrix = [[0 for y in range(self.matrixsize)] for x in range(self.matrixsize)] #Neighbor matrix
             self.cellmap = [[0 for y in range(self.matrixsize)] for x in range(self.matrixsize)] #Cell matrix
+            self.livelist = []
+            self.newcell = []
 
         def getxy(mouseevent):    
             x = math.floor(mouseevent.x / self.gridsize) * self.gridsize
@@ -38,23 +40,33 @@ class GameOfLife:
             ymatrix = int(y / self.gridsize)
             
             if self.cellmap[xmatrix][ymatrix] == 0:
+                self.livelist.append(f'{xmatrix},{ymatrix}')
                 addneighbors(xmatrix,ymatrix)
                 addsquare(xmatrix, ymatrix)
+                #print(self.livelist)
             elif self.cellmap[xmatrix][ymatrix] == 1:
+                self.livelist.remove(f'{xmatrix},{ymatrix}')
                 deleteneighbors(xmatrix, ymatrix)
                 deletesquare(xmatrix, ymatrix)
+                #print(self.livelist)
             #print("Position = ({0},{1})".format(x, y))
         
         def addsquare(x, y):
             self.cellmap[x][y] = 1
+            if f'{x},{y}' not in self.livelist:
+                self.livelist.append(f'{x},{y}')
             x = x * self.gridsize
             y = y * self.gridsize
+            print(self.newcell)
             self.canvas.create_rectangle(x+1, y+1, x + self.gridsize-1, y + self.gridsize-1, fill='black', outline='black', tags=f'sq{x}{y}')
 
         def deletesquare(x, y):
             self.cellmap[x][y] = 0
+            #if f'{x},{y}' in self.livelist:
+            self.livelist.remove(f'{x},{y}')
             x = x * self.gridsize
             y = y * self.gridsize
+            print(self.newcell)
             self.canvas.delete(f'sq{x}{y}')
         
         def start():
@@ -77,6 +89,7 @@ class GameOfLife:
             while self.isRunning:
                 root.update()
                 newgeneration()
+                #root.update()
                 root.after(self.sleepTime)
         
         def stop():
@@ -94,6 +107,12 @@ class GameOfLife:
                         continue
                     self.nmatrix[x+i][y+j] += 1
 
+                    if self.nmatrix[x+i][y+j] == 3:
+                        if f'{x+i},{y+j}' in self.newcell:
+                            continue
+                        else:
+                            self.newcell.append(f'{x},{y}')
+
         def deleteneighbors(x, y):
             for i in range(-1, 2):
                 for j in range(-1, 2):
@@ -104,23 +123,49 @@ class GameOfLife:
                     if x+i >= self.matrixsize or y+j >= self.matrixsize:
                         continue
                     self.nmatrix[x+i][y+j] -= 1
+                    if self.nmatrix[x+i][y+j] != 3:
+                        if f'{x+i},{y+j}' in self.newcell:
+                            self.newcell.remove(f'{x+i},{y+j}')
 
         def newgeneration():
+            livelistbuffer = copy.deepcopy(self.livelist)
+            newcellbuffer = copy.deepcopy(self.newcell)
             nmatrixbuffer = copy.deepcopy(self.nmatrix)
-            cellmapbuffer = copy.deepcopy(self.cellmap)
 
-            for x in range(self.matrixsize):
+            for i in range(len(livelistbuffer)):
+                x = int(livelistbuffer[i].split(',',-1)[0])
+                y = int(livelistbuffer[i].split(',',-1)[1])
+    
+                if nmatrixbuffer[x][y] < 2 or nmatrixbuffer[x][y] > 3: #cell dies
+                    self.cellmap[x][y] = 0
+                    if f'{x},{y}' in self.livelist:
+                        self.livelist.remove(f'{x},{y}')
+                    deletesquare(x,y)
+                    deleteneighbors(x,y)
+            
+            for i in range(len(newcellbuffer)):
+                x = int(newcellbuffer[i].split(',',-1)[0])
+                y = int(newcellbuffer[i].split(',',-1)[1])
+                self.cellmap[x][y] = 1
+                self.livelist.append(f'{x},{y}')
+                addsquare(x,y)
+                addneighbors(x,y)
+            #print(self.livelist)
+            #print(self.newcell)
+
+            """ for x in range(self.matrixsize):
                 for y in range(self.matrixsize):
                     if cellmapbuffer[x][y] == 0 and nmatrixbuffer[x][y] == 3: #new cell
+                        self.cellmap[x][y] = 1
                         addsquare(x,y)
                         addneighbors(x,y)
-                        self.cellmap[x][y] = 1
 
                     if cellmapbuffer[x][y] == 1:
                         if nmatrixbuffer[x][y] < 2 or nmatrixbuffer[x][y] > 3: #cell dies
-                            deletesquare(x,y)
-                            deleteneighbors(x,y)
                             self.cellmap[x][y] = 0
+                            deletesquare(x,y)
+                            deleteneighbors(x,y) """ 
+
 
         def randomize():
             for x in range(self.matrixsize):
@@ -142,6 +187,12 @@ class GameOfLife:
                             addsquare(x,y)
                             addneighbors(x,y)
                             continue
+            """ print('---Cell Map---')
+            for x in range(self.matrixsize):
+                print(self.cellmap[x])
+            print('---Neighbors---')
+            for x in range(self.matrixsize):
+                print(self.nmatrix[x]) """
 
         def reset():
             stop()
@@ -170,13 +221,15 @@ class GameOfLife:
                     create_grid()
 
         def create_grid(event=None):
-            self.canvas.delete('grid_line')
+            #w = c.winfo_width() # Get current width of canvas
+            #h = c.winfo_height() # Get current height of canvas
+            self.canvas.delete('grid_line') # Will only remove the grid_line
 
-            # Creates all vertical lines
+            # Creates all vertical lines at intevals of 100
             for i in range(0, self.canvassize + self.gridsize, self.gridsize):
                 self.canvas.create_line([(i, 0), (i, self.canvassize)], tag='grid_line', fill='gray')
 
-            # Creates all horizontal lines
+            # Creates all horizontal lines at intevals of 100
             for i in range(0, self.canvassize + self.gridsize, self.gridsize):
                 self.canvas.create_line([(0, i), (self.canvassize, i)], tag='grid_line', fill='gray')
 
@@ -196,6 +249,7 @@ class GameOfLife:
         self.canvas.bind('<Button-1>', getxy)
         if self.isGridActive:
             create_grid()
+        #generateBoard()
         initmatrices()
         root.mainloop()
 
